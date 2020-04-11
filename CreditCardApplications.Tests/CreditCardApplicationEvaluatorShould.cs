@@ -8,7 +8,7 @@ namespace CreditCardApplications.Tests
         [Fact]
         public void AcceptHighIncomeApplications()
         {
-            var sut = new CreditCardApplicationEvaluator();
+            var sut = new CreditCardApplicationEvaluator(null);
             var application = new CreditCardApplication
             {
                 GrossAnnualIncome = 100_000
@@ -21,7 +21,7 @@ namespace CreditCardApplications.Tests
         [Fact]
         public void ReferYoungApplications()
         {
-            var sut = new CreditCardApplicationEvaluator();
+            var sut = new CreditCardApplicationEvaluator(null);
             var application = new CreditCardApplication { Age = 19};
             CreditCardApplicationDecision decision = sut.Evaluate(application);
             Assert.Equal(CreditCardApplicationDecision.ReferredToHuman,decision);
@@ -30,7 +30,7 @@ namespace CreditCardApplications.Tests
         [Fact]
         public void DeclinedLowIncomeApplication()
         {
-            var sut = new CreditCardApplicationEvaluator();
+            var sut = new CreditCardApplicationEvaluator(null);
             var application = new CreditCardApplication {GrossAnnualIncome = 19_000,Age =21};
             var decision = sut.Evaluate(application);
             Assert.Equal(CreditCardApplicationDecision.AutoDeclined,decision);
