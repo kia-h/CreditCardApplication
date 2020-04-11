@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-
+using Moq;
 namespace CreditCardApplications.Tests
 {
     public class CreditCardApplicationEvaluatorShould
@@ -8,7 +8,8 @@ namespace CreditCardApplications.Tests
         [Fact]
         public void AcceptHighIncomeApplications()
         {
-            var sut = new CreditCardApplicationEvaluator(null);
+            Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
             var application = new CreditCardApplication
             {
                 GrossAnnualIncome = 100_000
@@ -21,7 +22,9 @@ namespace CreditCardApplications.Tests
         [Fact]
         public void ReferYoungApplications()
         {
-            var sut = new CreditCardApplicationEvaluator(null);
+            Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
             var application = new CreditCardApplication { Age = 19};
             CreditCardApplicationDecision decision = sut.Evaluate(application);
             Assert.Equal(CreditCardApplicationDecision.ReferredToHuman,decision);
@@ -30,11 +33,16 @@ namespace CreditCardApplications.Tests
         [Fact]
         public void DeclinedLowIncomeApplication()
         {
-            var sut = new CreditCardApplicationEvaluator(null);
-            var application = new CreditCardApplication {GrossAnnualIncome = 19_000,Age =21};
+            Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.Setup(m => m.IsValid("x")).Returns(true);
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+            var application = new CreditCardApplication {GrossAnnualIncome = 19_999,Age =42,FrequentFlyerNumber ="x"};
             var decision = sut.Evaluate(application);
             Assert.Equal(CreditCardApplicationDecision.AutoDeclined,decision);
 
         }
+
+      
     }
 }
