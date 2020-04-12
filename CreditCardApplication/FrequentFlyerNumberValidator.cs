@@ -24,7 +24,7 @@ namespace CreditCardApplications
             throw new NotImplementedException("For demo purposes");
         }
 
-        public string LicenseKey
+        public IFrequentFlyerNumberValidator.IServiceInformation ServiceInformation
         {
             get
             {
