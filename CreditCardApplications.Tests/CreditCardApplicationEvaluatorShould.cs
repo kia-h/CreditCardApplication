@@ -75,5 +75,19 @@ namespace CreditCardApplications.Tests
         {
             return "EXPIRED";
         }
+
+        [Fact]
+        public void UseDetailedLookupForOlderApplication()
+        {
+            var mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            mockValidator.SetupAllProperties();
+            mockValidator.Setup((x => x.ServiceInformation.License.LicenseKey)).Returns(("OK"));
+            //mockValidator.SetupProperty(x => x.ValidationMode);
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
+            var application = new CreditCardApplication { Age = 30};
+            var decision = sut.Evaluate(application);
+            Assert.Equal(ValidationMode.Detailed, mockValidator.Object.ValidationMode);
+        }
+
     }
 }

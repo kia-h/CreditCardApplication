@@ -24,7 +24,7 @@ namespace CreditCardApplications
             throw new NotImplementedException("For demo purposes");
         }
 
-        public IFrequentFlyerNumberValidator.IServiceInformation ServiceInformation
+        public IServiceInformation ServiceInformation
         {
             get
             {
@@ -32,6 +32,10 @@ namespace CreditCardApplications
             }
         }
 
-        
+        public ValidationMode ValidationMode
+        {
+            get => throw new NotImplementedException("for demo purpose"); 
+            set => throw new NotImplementedException("for demo purpose");
+        }
     }
 }
