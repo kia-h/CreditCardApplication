@@ -6,7 +6,7 @@ namespace CreditCardApplication
 {
     public class FraudLookup
     {
-        public bool IsFraudRisk(CreditCardApplications.CreditCardApplication application)
+        virtual public bool IsFraudRisk(CreditCardApplications.CreditCardApplication application)
         {
             if (application.LastName == "Smith")
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using CreditCardApplication;
 using Xunit;
 using Moq;
 using Range = Moq.Range;
@@ -138,6 +139,20 @@ namespace CreditCardApplications.Tests
 
             var secondDecision = sut.Evaluate(application);
             Assert.Equal(CreditCardApplicationDecision.AutoDeclined,secondDecision);
+        }
+
+        [Fact]
+        public void ReferredFraudRisk()
+        {
+            Mock<IFrequentFlyerNumberValidator> mockValidator = new Mock<IFrequentFlyerNumberValidator>();
+            Mock<FraudLookup> mockFraudLookup = new Mock<FraudLookup>();
+            mockFraudLookup.Setup(x => x.IsFraudRisk(It.IsAny<CreditCardApplication>())).Returns(true);
+
+            var sut = new CreditCardApplicationEvaluator(mockValidator.Object,mockFraudLookup.Object);
+            var application = new CreditCardApplication();
+
+            var decision = sut.Evaluate(application);
+            Assert.Equal(CreditCardApplicationDecision.ReferredToHumanFraudRisk, decision);
         }
 
 
