@@ -37,5 +37,7 @@ namespace CreditCardApplications
             get => throw new NotImplementedException("for demo purpose"); 
             set => throw new NotImplementedException("for demo purpose");
         }
+
+        public event EventHandler ValidatorLookupPerformed;
     }
 }
