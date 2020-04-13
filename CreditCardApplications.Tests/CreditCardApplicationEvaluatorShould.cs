@@ -113,7 +113,9 @@ namespace CreditCardApplications.Tests
             mockValidator.Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
             var sut = new CreditCardApplicationEvaluator(mockValidator.Object);
             var application = new CreditCardApplication {FrequentFlyerNumber = "x", Age = 25};
-            var decision = sut.Evaluate(application);
+            sut.Evaluate(application);
+
+            mockValidator.Raise(x=>x.ValidatorLookupPerformed+=null,EventArgs.Empty);
             Assert.Equal(1,sut.ValidatorLookupCount);
         }
 
