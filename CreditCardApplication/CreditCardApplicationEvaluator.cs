@@ -1,4 +1,5 @@
 ﻿using System;
+using CreditCardApplication;
 
 namespace CreditCardApplications
 {
@@ -8,13 +9,15 @@ namespace CreditCardApplications
         private const int HighIncomeThreshhold = 100_000;
         private const int LowIncomeThreshhold = 20_000;
         private readonly IFrequentFlyerNumberValidator _validator;
+        private readonly FraudLookup _fraudLookup;
 
         public int ValidatorLookupCount { get; private set; }
 
-        public CreditCardApplicationEvaluator(IFrequentFlyerNumberValidator validator)
+        public CreditCardApplicationEvaluator(IFrequentFlyerNumberValidator validator,FraudLookup fraudLookup=null)
         {
             _validator = validator?? throw new System.ArgumentNullException();
             _validator.ValidatorLookupPerformed += ValidatorLookupPerformed;
+            _fraudLookup = fraudLookup;
         }
 
         private void ValidatorLookupPerformed(object? sender, EventArgs e)
@@ -23,6 +26,11 @@ namespace CreditCardApplications
 
         public CreditCardApplicationDecision Evaluate(CreditCardApplication application)
         {
+            if (_fraudLookup != null && _fraudLookup.IsFraudRisk(application))
+            {
+                return CreditCardApplicationDecision.ReferredToHumanFraudRisk;
+            }
+
             if (application.GrossAnnualIncome >= HighIncomeThreshhold)
             {
                 return CreditCardApplicationDecision.AutoAccepted;

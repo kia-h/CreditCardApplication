@@ -140,5 +140,7 @@ namespace CreditCardApplications.Tests
             Assert.Equal(CreditCardApplicationDecision.AutoDeclined,secondDecision);
         }
 
+
+
     }
 }
